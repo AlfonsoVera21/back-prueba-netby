@@ -29,4 +29,12 @@ public class StockTransaction
         UnitPrice = unitPrice;
         Detail = detail;
     }
+
+    public void Update(TransactionType type, int quantity, decimal unitPrice, string detail)
+    {
+        Type = type;
+        Quantity = quantity;
+        UnitPrice = unitPrice;
+        Detail = detail;
+    }
 }

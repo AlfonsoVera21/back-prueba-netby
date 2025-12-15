@@ -19,6 +19,25 @@ public class EfTransactionRepository : ITransactionRepository
         await _context.SaveChangesAsync();
     }
 
+    public async Task DeleteAsync(StockTransaction transaction)
+    {
+        _context.Transactions.Remove(transaction);
+        await _context.SaveChangesAsync();
+    }
+
+    public async Task<IReadOnlyList<StockTransaction>> GetAllAsync()
+    {
+        return await _context.Transactions
+             .AsNoTracking()
+             .OrderByDescending(t => t.Date)
+             .ToListAsync();
+    }
+
+    public async Task<StockTransaction?> GetByIdAsync(Guid id)
+    {
+        return await _context.Transactions.FindAsync(id);
+    }
+
     public async Task<IReadOnlyList<StockTransaction>> GetHistoryAsync(Guid productId, DateTime? from, DateTime? to, TransactionType? type)
     {
         var query = _context.Transactions.AsNoTracking().Where(t => t.ProductId == productId);
@@ -31,5 +50,11 @@ public class EfTransactionRepository : ITransactionRepository
             query = query.Where(t => t.Type == type.Value);
 
         return await query.OrderByDescending(t => t.Date).ToListAsync();
+    }
+
+    public async Task UpdateAsync(StockTransaction transaction)
+    {
+        _context.Transactions.Update(transaction);
+        await _context.SaveChangesAsync();
     }
 }

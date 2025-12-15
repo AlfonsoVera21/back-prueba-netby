@@ -38,6 +38,49 @@ namespace TransactionService.Api.controllers
             }
         }
 
+        // GET api/transactions  (Read - lista)
+        [HttpGet]
+        public async Task<IActionResult> GetAll()
+        {
+            var items = await _transactionRepository.GetAllAsync();
+            return Ok(items);
+        }
+
+        // GET api/transactions/{id}  (Read - detalle)
+        [HttpGet("{id:guid}")]
+        public async Task<IActionResult> GetById(Guid id)
+        {
+            var tx = await _transactionRepository.GetByIdAsync(id);
+            if (tx is null) return NotFound();
+            return Ok(tx);
+        }
+
+        // PUT api/transactions/{id}  (Update)
+        [HttpPut("{id:guid}")]
+        public async Task<IActionResult> Update(Guid id, [FromBody] RegisterTransactionCommand cmd)
+        {
+            var tx = await _transactionRepository.GetByIdAsync(id);
+            if (tx is null) return NotFound();
+
+            tx.Update(cmd.Type, cmd.Quantity, cmd.UnitPrice, cmd.Detail);
+
+            await _transactionRepository.UpdateAsync(tx);
+
+            return NoContent();
+        }
+
+        // DELETE api/transactions/{id}  (Delete)
+        [HttpDelete("{id:guid}")]
+        public async Task<IActionResult> Delete(Guid id)
+        {
+            var tx = await _transactionRepository.GetByIdAsync(id);
+            if (tx is null) return NotFound();
+
+            await _transactionRepository.DeleteAsync(tx);
+
+            return NoContent();
+        }
+
         // GET api/transactions/history?productId=...&from=...&to=...&type=...
         [HttpGet("history")]
         public async Task<IActionResult> GetHistory(

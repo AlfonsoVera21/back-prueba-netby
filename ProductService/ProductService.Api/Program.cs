@@ -1,5 +1,4 @@
 using Microsoft.EntityFrameworkCore;
-using ProductService.Application.Commands;
 using ProductService.Application.Handlers;
 using ProductService.Domain.Ports;
 using ProductService.Infrastructure;

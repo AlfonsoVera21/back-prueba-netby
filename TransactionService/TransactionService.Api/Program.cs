@@ -1,7 +1,5 @@
 using Microsoft.EntityFrameworkCore;
-using TransactionService.Application.Commands;
 using TransactionService.Application.Handlers;
-using TransactionService.Domain.Entities;
 using TransactionService.Domain.Ports;
 using TransactionService.Infrastructure;
 using Microsoft.OpenApi.Models;
